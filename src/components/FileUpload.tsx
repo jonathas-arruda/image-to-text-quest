@@ -124,72 +124,73 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFilesChange, files }) 
           <CardContent>
             <div className="space-y-4">
               {files.map((file) => (
-                <div key={file.id} className="flex items-center space-x-4 p-4 border rounded-lg">
-                  <div className="flex-shrink-0">
-                    {file.type === 'image' ? (
-                      <div className="relative">
-                        <Image className="h-10 w-10 text-accent" />
-                        {file.preview && (
-                          <img
-                            src={file.preview}
-                            alt={file.file.name}
-                            className="absolute inset-0 h-10 w-10 object-cover rounded"
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <FileText className="h-10 w-10 text-destructive" />
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{file.file.name}</p>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <Badge variant={file.type === 'image' ? 'default' : 'destructive'}>
-                        {file.type.toUpperCase()}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        {formatFileSize(file.file.size)}
-                      </span>
-                      {file.wordCount !== undefined && (
-                        <Badge variant="outline" className="text-accent">
-                          {file.wordCount} palavras
-                        </Badge>
+                <div key={file.id} className="border rounded-lg p-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-shrink-0">
+                      {file.type === 'image' ? (
+                        <div className="relative">
+                          <Image className="h-10 w-10 text-accent" />
+                          {file.preview && (
+                            <img
+                              src={file.preview}
+                              alt={file.file.name}
+                              className="absolute inset-0 h-10 w-10 object-cover rounded"
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        <FileText className="h-10 w-10 text-destructive" />
                       )}
                     </div>
                     
-                    {file.processing && (
-                      <div className="mt-2">
-                        <div className="flex items-center space-x-2">
-                          <Progress value={undefined} className="flex-1" />
-                          <span className="text-xs text-muted-foreground">Processando...</span>
-                        </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{file.file.name}</p>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <Badge variant={file.type === 'image' ? 'default' : 'destructive'}>
+                          {file.type.toUpperCase()}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {formatFileSize(file.file.size)}
+                        </span>
+                        {file.wordCount !== undefined && (
+                          <Badge variant="outline" className="text-accent">
+                            {file.wordCount} palavras
+                          </Badge>
+                        )}
                       </div>
-                    )}
-                  </div>
+                      
+                      {file.processing && (
+                        <div className="mt-2">
+                          <div className="flex items-center space-x-2">
+                            <Progress value={undefined} className="flex-1" />
+                            <span className="text-xs text-muted-foreground">Processando...</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="flex items-center space-x-2">
-                    {file.text && (
+                    <div className="flex items-center space-x-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => {
-                          toast.info("Texto extraído", {
-                            description: file.text?.substring(0, 100) + (file.text && file.text.length > 100 ? '...' : '')
-                          });
-                        }}
+                        onClick={() => removeFile(file.id)}
                       >
-                        <Eye className="h-4 w-4" />
+                        <X className="h-4 w-4" />
                       </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeFile(file.id)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                    </div>
                   </div>
+                  
+                  {/* Display extracted text for images */}
+                  {file.type === 'image' && file.text && (
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <h4 className="text-sm font-medium mb-2 text-foreground">Texto extraído:</h4>
+                      <div className="bg-muted p-3 rounded-md">
+                        <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words">
+                          {file.text}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
