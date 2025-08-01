@@ -4,9 +4,6 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { UploadedFile } from './FileUpload';
 import { toast } from 'sonner';
 
-// Configure PDF.js to use the legacy build without worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-
 interface OCRProcessorProps {
   files: UploadedFile[];
   onFilesUpdate: (files: UploadedFile[]) => void;
@@ -61,7 +58,16 @@ export const OCRProcessor: React.FC<OCRProcessorProps> = ({ files, onFilesUpdate
       toast.info(`Extraindo texto do PDF ${file.file.name}...`);
       
       const arrayBuffer = await file.file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      
+      // Use PDF.js without worker
+      const loadingTask = pdfjsLib.getDocument({
+        data: arrayBuffer,
+        useWorkerFetch: false,
+        isEvalSupported: false,
+        useSystemFonts: true
+      });
+      
+      const pdf = await loadingTask.promise;
       
       let extractedText = '';
       
