@@ -4,8 +4,8 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { UploadedFile } from './FileUpload';
 import { toast } from 'sonner';
 
-// Configure PDF.js with fallback worker URL
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Configure PDF.js to use the legacy build without worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = '';
 
 interface OCRProcessorProps {
   files: UploadedFile[];
