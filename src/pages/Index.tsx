@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FileUpload, UploadedFile } from '@/components/FileUpload';
 import { OCRProcessor } from '@/components/OCRProcessor';
 import { WordCounter } from '@/components/WordCounter';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const Index = () => {
   const [files, setFiles] = useState<UploadedFile[]>([]);
@@ -13,6 +14,11 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* Theme Toggle */}
+        <div className="flex justify-end mb-4">
+          <ThemeToggle />
+        </div>
+        
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
