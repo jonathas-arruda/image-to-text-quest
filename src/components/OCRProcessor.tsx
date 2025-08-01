@@ -16,7 +16,26 @@ export const OCRProcessor: React.FC<OCRProcessorProps> = ({ files, onFilesUpdate
   
   const countWords = (text: string): number => {
     if (!text) return 0;
-    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    
+    // Remove quebras de linha e espaços extras
+    const cleanedText = text
+      .replace(/\n+/g, ' ')  // Replace line breaks with spaces
+      .replace(/\s+/g, ' ')  // Replace multiple spaces with single space
+      .trim();
+    
+    if (!cleanedText) return 0;
+    
+    // Split by spaces and filter valid words
+    const words = cleanedText
+      .split(' ')
+      .filter(word => {
+        // Remove punctuation and special characters for validation
+        const cleanWord = word.replace(/[^\w\u00C0-\u017F]/g, '');
+        // Count only words with at least 2 characters and containing letters
+        return cleanWord.length >= 2 && /[a-zA-ZÀ-ÿ]/.test(cleanWord);
+      });
+    
+    return words.length;
   };
 
   // Solution 1: PDF.js with CDN worker
